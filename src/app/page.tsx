@@ -45,7 +45,7 @@ function VideoCard({ video }: { video: { id: string, title: string } }) {
           <div className="w-full h-full transform scale-[1.7] origin-center">
             {isHovered && (
               <iframe 
-                src={`https://www.youtube.com/embed/${video.id}?autoplay=1&mute=0&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${video.id}`}
+                src={`https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&loop=1&playlist=${video.id}`}
                 allow="autoplay; encrypted-media"
                 className="w-full h-full object-cover border-0"
               ></iframe>
@@ -254,7 +254,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
               <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 text-white">Últimos <span className="text-[#563b8b]">Trabalhos</span></h2>
-              <p className="text-gray-400">Passe o mouse por cima para reproduzir a prévia (com som).</p>
+              <p className="text-gray-400">Passe o mouse por cima para reproduzir a prévia.</p>
             </div>
             <Link href="https://youtube.com/shorts/j7DxByFrf34" target="_blank" className="text-white hover:text-[#563b8b] flex items-center gap-2 border-b border-white/30 hover:border-[#563b8b] pb-1 transition-all w-max py-2">
               Ver no YouTube <ArrowRight size={16} />
@@ -272,7 +272,7 @@ export default function Home() {
       {/* Contato Section */}
       <section id="contato" className="py-24 px-6 lg:px-24 bg-[#563b8b] text-white relative z-20 pt-32">
         <div className="max-w-4xl mx-auto text-center">
-          <img src="/images/Logo 2.jpeg" alt="Luma Logo Inverted" className="mx-auto mb-8 w-24 h-24 object-cover rounded-full shadow-2xl mix-blend-lighten" />
+          <img src="/images/Logo 2.jpeg" alt="Luma Logo Inverted" className="mx-auto mb-8 w-100 h-100 object-cover rounded-full shadow-2xl mix-blend-lighten" />
           <h2 className="font-playfair text-5xl md:text-7xl font-bold mb-8">Vamos Trabalhar <br /> <span className="italic font-light">Juntos!</span></h2>
           <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-2xl mx-auto font-light">
             Nós estamos sempre prontos para novos desafios e para aplicar nossa criatividade em projetos inovadores.
