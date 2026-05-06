@@ -109,7 +109,7 @@ export default function Home() {
   const headerHeight = lerp(64, 88, responsiveProgress);
 
   // logo final maior dentro do header
-  const finalLogoHeight = lerp(52, 140, responsiveProgress);
+  const finalLogoHeight = lerp(100, 140, responsiveProgress);
 
   // posição final do logo dentro do header
   const finalLogoTop = (headerHeight - finalLogoHeight) / 2;
