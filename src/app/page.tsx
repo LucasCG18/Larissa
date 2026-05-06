@@ -66,41 +66,100 @@ function VideoCard({ video }: { video: { id: string, title: string } }) {
 
 export default function Home() {
   const { scrollY } = useScroll();
-  const [windowWidth, setWindowWidth] = useState(1200);
+
+  const [viewport, setViewport] = useState({
+    width: 1200,
+    height: 800,
+  });
 
   useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
+    const handleResize = () => {
+      setViewport({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    handleResize();
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const isLg = windowWidth >= 1024;
-  const isMd = windowWidth >= 768;
+  const clamp = (min: number, value: number, max: number) => {
+    return Math.min(Math.max(value, min), max);
+  };
 
-    const headerHeight = isMd ? 0 : 72;
-    const finalLogoHeight = isMd ? 64 : 48;
-    const finalLogoTop = `${(headerHeight - finalLogoHeight) / 2}px`;
+  const lerp = (min: number, max: number, progress: number) => {
+    return min + (max - min) * progress;
+  };
 
-    const topTransform = useTransform(scrollY, [0, 500], ["200vh", finalLogoTop]);
-    const leftTransform = useTransform(scrollY, [0, 500], ["750%", isLg ? "32px" : "20px"]);
-    const xTransform = useTransform(scrollY, [0, 500], ["-50%", "0%"]);
-    const yTransform = useTransform(scrollY, [0, 500], ["-50%", "0%"]);
-    const scaleTransform = useTransform(scrollY, [0, 500], [isMd ? 3.4 : 2.6, 1]);
+  const { width, height } = viewport;
+
+  const responsiveProgress = clamp(
+    0,
+    (width - 390) / (1440 - 390),
+    1
+  );
+
+  // duração da animação
+  const scrollEnd = lerp(320, 520, responsiveProgress);
+
+  // header maior
+  const headerHeight = lerp(64, 88, responsiveProgress);
+
+  // logo final maior dentro do header
+  const finalLogoHeight = lerp(52, 140, responsiveProgress);
+
+  // posição final do logo dentro do header
+  const finalLogoTop = (headerHeight - finalLogoHeight) / 2;
+  const finalLogoLeft = lerp(16, 36, responsiveProgress);
+
+  // posição inicial no hero
+  // sobe um pouco o logo para ficar mais bem enquadrado
+  const initialLogoTop = height * lerp(0.30, 0.34, responsiveProgress);
+
+  // centro da tela
+  // ajuste fino de alguns pixels para compensar possível "respiro" do PNG
+  const initialLogoLeft = (width / 2) - lerp(6, 14, responsiveProgress);
+
+  // escala inicial
+  const initialLogoScale = lerp(2.4, 3.8, responsiveProgress);
+
+  const topTransform = useTransform(
+    scrollY,
+    [0, scrollEnd],
+    [initialLogoTop, finalLogoTop]
+  );
+
+  const leftTransform = useTransform(
+    scrollY,
+    [0, scrollEnd],
+    [initialLogoLeft, finalLogoLeft]
+  );
+
+  const xTransform = useTransform(scrollY, [0, scrollEnd], ['-50%', '0%']);
+  const yTransform = useTransform(scrollY, [0, scrollEnd], ['-50%', '0%']);
+
+  const scaleTransform = useTransform(
+    scrollY,
+    [0, scrollEnd],
+    [initialLogoScale, 1]
+  );
 
   return (
     <main className="flex-1 w-full overflow-x-hidden bg-[#202020] text-white min-h-screen">
-      {/* Logo Animado (Substitui o da nav estática) */}
+      {/* Logo Animado */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-[100]">
-        <motion.div 
-          style={{ 
-            position: "absolute",
+        <motion.div
+          style={{
+            position: 'absolute',
             top: topTransform,
             left: leftTransform,
             x: xTransform,
             y: yTransform,
             scale: scaleTransform,
-            transformOrigin: "top left"
+            transformOrigin: 'center center',
           }}
           className="pointer-events-auto cursor-pointer"
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
@@ -108,18 +167,30 @@ export default function Home() {
           <img
             src="/images/sem fundo 2.png"
             alt="Luma Produções"
-            className="h-30 md:h-36 w-auto object-contain drop-shadow-2xl"
-            />
+            style={{ height: `${finalLogoHeight}px` }}
+            className="w-auto object-contain drop-shadow-2xl"
+          />
         </motion.div>
       </div>
 
-      {/* NavBar Fixa e com Fundo Escuro para Leitura */}
-      <nav className="fixed top-0 left-0 w-full h-16 md:h-[72px] px-6 lg:px-24 flex justify-end items-center z-[90] bg-[#202020]/95 backdrop-blur-xl border-b border-white/5 shadow-lg">
-        <div className="hidden md:flex gap-8 text-sm font-medium tracking-wider mt-1">
-          <a href="#sobre" className="hover:text-white transition-colors drop-shadow-md">SOBRE</a>
-          <a href="#habilidades" className="hover:text-white transition-colors drop-shadow-md">HABILIDADES</a>
-          <a href="#portfolio" className="hover:text-white transition-colors drop-shadow-md">PORTFÓLIO</a>
-          <a href="#contato" className="hover:text-white transition-colors drop-shadow-md">CONTATO</a>
+      {/* NavBar */}
+      <nav
+        style={{ height: `${headerHeight}px` }}
+        className="fixed top-0 left-0 w-full px-4 md:px-6 lg:px-24 flex justify-end items-center z-[90] bg-[#202020]/95 backdrop-blur-xl border-b border-white/5 shadow-lg"
+      >
+        <div className="hidden lg:flex gap-8 text-sm font-medium tracking-wider mt-1">
+          <a href="#sobre" className="hover:text-white transition-colors drop-shadow-md">
+            SOBRE
+          </a>
+          <a href="#habilidades" className="hover:text-white transition-colors drop-shadow-md">
+            HABILIDADES
+          </a>
+          <a href="#portfolio" className="hover:text-white transition-colors drop-shadow-md">
+            PORTFÓLIO
+          </a>
+          <a href="#contato" className="hover:text-white transition-colors drop-shadow-md">
+            CONTATO
+          </a>
         </div>
       </nav>
 
