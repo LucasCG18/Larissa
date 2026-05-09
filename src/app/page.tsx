@@ -14,12 +14,12 @@ const portfolios = [
 ];
 
 const galleryImages = [
-  '/images/_LIV0577-Aprimorado-NR(1).JPG',
-  '/images/_LIV0601-Aprimorado-NR.JPG',
-  '/images/_LIV0641-Aprimorado-NR.JPG',
-  '/images/_LIV0769-Aprimorado-NR.JPG',
-  '/images/Cópia de IMG_1519.jpg',
-  '/images/Cópia de IMG_1521.jpg'
+  '/images/Fotonova1.jpeg',
+  '/images/fotonova2.jpeg',
+  '/images/fotonova3.jpeg',
+  '/images/fotonova4.jpeg',
+  '/images/fotonova5.jpeg',
+  '/images/fotonova6.jpeg'
 ];
 
 function VideoCard({ video }: { video: { id: string, title: string } }) {
